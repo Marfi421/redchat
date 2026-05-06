@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="loginWrapper">
+<div class="loginBox">
+
+<h2>Admin Panel</h2>
+
+<button onclick="gen()">Generate Invite</button>
+<p id="code"></p>
+
+<h3>Registered Users</h3>
+<div id="users"></div>
+
+<button onclick="enter()">Enter Chat</button>
+<button onclick="logout()">Logout</button>
+
+</div>
+</div>
+
+<script>
+if(localStorage.getItem("user")!=="admin"){
+    location="index.html";
+}
+
+// GENERATE INVITE
+async function gen(){
+    let r = await fetch('/generate',{method:'POST'});
+    let t = await r.text();
+    code.innerText = "Invite: " + t;
+}
+
+// LOAD USERS
+async function loadUsers(){
+    let r = await fetch('/users');
+    let data = await r.json();
+
+    users.innerHTML = "";
+
+    data.forEach(u=>{
+        users.innerHTML += `
+        <div style="margin-bottom:6px;">
+            ${u.username}
+        </div>
+        `;
+    });
+}
+
+// AUTO REFRESH USERS
+setInterval(loadUsers, 2000);
+
+function enter(){
+    location="chat.html";
+}
+
+function logout(){
+    localStorage.removeItem("user");
+    location="index.html";
+}
+
+loadUsers();
+</script>
+
+</body>
+</html>

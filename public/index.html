@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="loginWrapper">
+<div class="loginBox">
+
+<h2>RedChat</h2>
+
+<input id="u" placeholder="Username">
+<input id="p" type="password" placeholder="Password">
+
+<button onclick="login()">Login</button>
+<button onclick="goReg()">Create Account</button>
+
+<p id="msg"></p>
+
+</div>
+</div>
+
+<script>
+async function login(){
+    let r = await fetch('/login',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+            username:u.value,
+            password:p.value
+        })
+    });
+
+    let t = await r.text();
+
+    if(t==="admin"){
+        localStorage.setItem("user",u.value);
+        location="admin.html";
+    }
+    else if(t==="ok"){
+        localStorage.setItem("user",u.value);
+        location="chat.html";
+    }
+    else{
+        msg.innerText="Wrong login";
+    }
+}
+
+function goReg(){
+    location="register.html";
+}
+</script>
+
+</body>
+</html>

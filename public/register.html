@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="loginWrapper">
+<div class="loginBox">
+
+<h2>Create Account</h2>
+
+<input id="u" placeholder="Username">
+<input id="p" type="password" placeholder="Password">
+<input id="c" placeholder="Invite Code">
+
+<button onclick="reg()">Create</button>
+<button onclick="back()">Back</button>
+
+<p id="msg"></p>
+
+</div>
+</div>
+
+<script>
+async function reg(){
+    let r = await fetch('/register',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+            username:u.value,
+            password:p.value,
+            invite:c.value
+        })
+    });
+
+    let t = await r.text();
+
+    if(t==="ok"){
+        msg.innerText="Account created";
+    } else if(t==="badInvite"){
+        msg.innerText="Invalid invite";
+    } else if(t==="exists"){
+        msg.innerText="User exists";
+    } else {
+        msg.innerText="Error";
+    }
+}
+
+function back(){
+    location="index.html";
+}
+</script>
+
+</body>
+</html>
