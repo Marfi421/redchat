@@ -1,0 +1,47 @@
+{
+  "name": "redchat",
+  "version": "1.0.1",
+  "description": "RedChat",
+  "author": "Marfi421",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win portable",
+    "publish": "electron-builder --win portable --publish always"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2"
+  },
+  "devDependencies": {
+    "electron": "^30.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "redchat.app",
+    "productName": "RedChat",
+    "asar": true,
+    "files": [
+      "**/*",
+      "!dist/*",
+      "!node_modules/.cache/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Marfi421",
+        "repo": "redchat"
+      }
+    ]
+  }
+}

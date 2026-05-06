@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="topbar">
+    Logged in as: <b id="me"></b>
+
+    <button onclick="logout()" style="float:right;width:100px;margin-left:10px;">
+        Logout
+    </button>
+
+    <button id="adminBtn" onclick="admin()" style="float:right;width:120px;">
+        Admin Panel
+    </button>
+</div>
+
+<div id="chat"></div>
+
+<div class="inputArea">
+    <input id="msg" placeholder="Type message..." onkeydown="if(event.key==='Enter')send()">
+    <button onclick="send()">Send</button>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const socket = io();
+const user = localStorage.getItem("user");
+
+if(!user){
+    location="index.html";
+}
+
+me.innerText = user;
+
+// ONLY SHOW ADMIN BUTTON FOR ADMIN
+if(user !== "admin"){
+    document.getElementById("adminBtn").style.display = "none";
+}
+
+// LOAD OLD MESSAGES
+async function load(){
+    let r = await fetch('/messages');
+    let data = await r.json();
+
+    chat.innerHTML = "";
+
+    data.forEach(m=>{
+        chat.innerHTML += `
+        <div class="msg">
+            <b>${m.user}:</b> ${m.text}
+        </div>
+        `;
+    });
+
+    chat.scrollTop = chat.scrollHeight;
+}
+
+// SEND MESSAGE
+function send(){
+    if(!msg.value) return;
+
+    socket.emit('message',{
+        user:user,
+        text:msg.value
+    });
+
+    msg.value="";
+}
+
+// RECEIVE MESSAGE
+socket.on('message', m=>{
+    chat.innerHTML += `
+    <div class="msg">
+        <b>${m.user}:</b> ${m.text}
+    </div>
+    `;
+
+    chat.scrollTop = chat.scrollHeight;
+});
+
+// LOGOUT
+function logout(){
+    localStorage.removeItem("user");
+    location="index.html";
+}
+
+// ADMIN PANEL
+function admin(){
+    location="admin.html";
+}
+
+load();
+</script>
+
+</body>
+</html>

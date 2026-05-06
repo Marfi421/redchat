@@ -1,0 +1,33 @@
+{
+  "users": [
+    {
+      "username": "admin",
+      "password": "395545",
+      "admin": true
+    }
+  ],
+  "invites": [
+    {
+      "code": "8gwzuco3al",
+      "active": true
+    },
+    {
+      "code": "v562r3e2df",
+      "active": true
+    },
+    {
+      "code": "w4lvp6cv4j",
+      "active": true
+    }
+  ],
+  "messages": [
+    {
+      "user": "admin",
+      "text": "ahoj"
+    },
+    {
+      "user": "admin",
+      "text": "test"
+    }
+  ]
+}
